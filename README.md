@@ -17,6 +17,7 @@ This demo is using a spring boot application which can be connected to H2 or MyS
 * [Run With H2](#run-with-h2)
 
 ## Pre Steps for H2 or MySQL 
+
 - Clone project and change into directory as follows
 
 ```bash 
@@ -195,7 +196,7 @@ spec:
 
 ```
 
-**Deploy as Follows** 
+- Deploy as Follows 
 
 ```bash
 $ kubectl apply -f springjpa-crud-mysql-deployment.yml
@@ -215,14 +216,14 @@ NAME                      TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(
 elastic-springjpa-crud-mysql-service-lb   LoadBalancer   10.131.245.234   35.244.71.190    80:30116/TCP      31h
 ```
 
--- Determine the LB IP to hit the home page using a command as follows
+- Determine the LB IP to hit the home page using a command as follows
 
 ```bash
 $ kubectl get service elastic-springjpa-crud-mysql-service-lb -o=jsonpath='{.status.loadBalancer.ingress[0].ip}{"\n"}'
 35.244.71.19
 ```
 
--- Navigate to the home page and generate some traffic as well as HTTP 500 and HTTP 404 errors 
+- Navigate to the home page and generate some traffic as well as HTTP 500 and HTTP 404 errors 
 
 http://{IP-FROM-LAST-STEP}
 
@@ -326,7 +327,7 @@ spec:
   type: LoadBalancer
 ```
 
-**Deploy as Follows** 
+- Deploy as Follows
 
 ```bash
 $ kubectl apply -f h2-springjpa-crud-deployment.yml
