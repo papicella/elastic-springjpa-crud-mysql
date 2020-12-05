@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-springjpa-crud-mysql-service
+spec:
+  selector:
+    matchLabels:
+      app: elastic-springjpa-crud-mysql-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: elastic-springjpa-crud-mysql-service
+    spec:
+      containers:
+        - name: elastic-book-service
+          image: pasapples/elastic-springjpa-crud-mysqlservice:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+          - name: ELASTIC_APM_ENABLE_LOG_CORRELATION
+            value: "true"
+          - name: ELASTIC_APM_CAPTURE_JMX_METRICS
+            value: >-
+              object_name[java.lang:type=GarbageCollector,name=*] attribute[CollectionCount:metric_name=collection_count] attribute[CollectionTime:metric_name=collection_time],
+              object_name[java.lang:type=Memory] attribute[HeapMemoryUsage:metric_name=heap]
+          - name: ELASTIC_APM_SERVER_URLS
+            valueFrom:
+              configMapKeyRef:
+                name: apm-agent-details
+                key: server_urls
+          - name: ELASTIC_APM_SERVICE_NAME
+            value: "elastic-springjpa-crud-mysql-service"
+          - name: ELASTIC_APM_APPLICATION_PACKAGES
+            value: "pas.spring.demos"
+          - name: ELASTIC_APM_SECRET_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: apm-token-secret
+                key: secret_token
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-springjpa-crud-mysql-service-lb
+  labels:
+    name: elastic-springjpa-crud-mysql-service-lb
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: elastic-springjpa-crud-mysql-service
+  type: LoadBalancer

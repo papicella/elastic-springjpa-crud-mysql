@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: elastic-springjpa-crud
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      use-new-id-generator-mappings: false
+      database-platform: org.hibernate.dialect.MySQL55Dialect
+    show-sql: true
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://34.87.228.103:3306/apples}
+    username: ${MYSQL_USER:pas}
+    password: ${MYSQL_PASSWD:pas}
+management:
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

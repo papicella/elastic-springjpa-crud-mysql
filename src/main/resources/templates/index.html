@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <div th:replace="head :: head"></div>
+</head>
+<body>
+<div th:switch="${users}" class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 th:case="null">No users yet!</h2>
+            <div th:case="*">
+                <h2 class="my-5">Users</h2>
+                <!-- Success Dismissible Alert -->
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Yay!</strong> Here is a list of all your Users which is a total of <span th:text="${userCount}" />!!!!!
+                </div>
+                <table class="table table-striped table-responsive-md">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td><a th:href="@{/edit/{id}(id=${user.id})}" class="btn btn-primary"><i class="fas fa-user-edit ml-2"></i></a></td>
+                        <td><a th:href="@{/delete/{id}(id=${user.id})}" class="btn btn-primary"><i class="fas fa-user-times ml-2"></i></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center">
+                <a href="/signup" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i></a>
+                <a href="/404issue" class="btn btn-primary">Invalid 404</a>
+                <a href="/500error" class="btn btn-primary">HTTP 500</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: footer"></div>
+
+</body>
+</html>
