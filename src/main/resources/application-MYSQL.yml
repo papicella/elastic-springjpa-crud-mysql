@@ -8,9 +8,9 @@ spring:
       database-platform: org.hibernate.dialect.MySQL55Dialect
     show-sql: true
   datasource:
-    url: ${MYSQL_URL:jdbc:mysql://34.87.228.103:3306/apples}
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/apples}
     username: ${MYSQL_USER:pas}
-    password: ${MYSQL_PASSWD:pas}
+    password: ${MYSQL_PASSWD:changeme}
 management:
   endpoint:
     info:
