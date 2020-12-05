@@ -8,6 +8,8 @@ This demo is using a spring boot application which can be connected to H2 or MyS
 
 * pack CLI - https://buildpacks.io/docs/tools/pack/
 * Elastic Cloud deployment with APM - https://cloud.elastic.co
+* A K8s cluster 
+* kubectl CLI - https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
 ## Table of Contents
 
@@ -38,6 +40,8 @@ $ pack build DOCKER-HUB-USER/elastic-springjpa-crud-mysqlservice:1.0 --builder p
 ```
 
 ## Run with MySQL
+
+_Note: Make sure you have run the pre steps prior to running these steps_
 
 - Using Helm install MySQL into the K8s cluster as follows
 
@@ -85,6 +89,8 @@ kubectl create secret generic elastic-springjpa-crud-mysql --from-literal=mysql_
 ```
 
 - Now we can deploy our service to K8s using the K8s YAML for deployment as follows. Replace DOCKER_HUB-USER with your user you used with pack CLI
+
+_Note: The file springjpa-crud-mysql-deployment.yml is provided in the ROOT directory of the cloned project if you wish to use my container image that is ok_
 
 **YAML**
 
@@ -192,6 +198,7 @@ elastic-springjpa-crud-mysql-service-lb   LoadBalancer   10.131.245.234   35.244
 $ kubectl get service elastic-springjpa-crud-mysql-service-lb -o=jsonpath='{.status.loadBalancer.ingress[0].ip}{"\n"}'
 35.244.71.19
 ```
+
 -- Navigate to the home page and generate some traffic as well as HTTP 500 and HTTP 404 errors 
 
 http://{IP-FROM-LAST-STEP}
@@ -212,11 +219,122 @@ http://{IP-FROM-LAST-STEP}
 
 ![alt tag](https://i.ibb.co/JmkTWPc/elastic-springjpa-crud-mysql-service-7.png)
 
-## Run with MySQL
+## Run with H2
 
-If you don't want to use MySQL H2 is fine in which case you would deploy it as follows
+If you don't want to use MySQL H2 is fine in which case you would deploy it as follows.
 
+_Note: Make sure you have run the pre steps prior to running these steps_
 
+- Make sure your connected to your K8s cluster and run the following commands to create a K8s Secret and ConfigMap. Please replace values as shown in the list below
+
+* APM-TOKEN
+* APM-SERVER-URL
+* APM-SERVER-PORT
+
+```bash
+kubectl create secret generic apm-token-secret --from-literal=secret_token=APM-TOKEN
+
+kubectl create configmap apm-agent-details --from-literal=server_urls=https://APM-SERVER-URL:APM-SERVER-PORT
+```
+
+- Now we can deploy our service to K8s using the K8s YAML for deployment as follows. Replace DOCKER_HUB-USER with your user you used with pack CLI
+
+_Note: The file h2-springjpa-crud-deployment.yml is provided in the ROOT directory of the cloned project if you wish to use my container image that is ok_
+
+**YAML**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-springjpa-crud-mysql-service
+spec:
+  selector:
+    matchLabels:
+      app: elastic-springjpa-crud-mysql-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: elastic-springjpa-crud-mysql-service
+    spec:
+      containers:
+        - name: elastic-book-service
+          image: DOCKER_HUB-USER/elastic-springjpa-crud-mysqlservice:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+          - name: ELASTIC_APM_ENABLE_LOG_CORRELATION
+            value: "true"
+          - name: ELASTIC_APM_CAPTURE_JMX_METRICS
+            value: >-
+              object_name[java.lang:type=GarbageCollector,name=*] attribute[CollectionCount:metric_name=collection_count] attribute[CollectionTime:metric_name=collection_time],
+              object_name[java.lang:type=Memory] attribute[HeapMemoryUsage:metric_name=heap]
+          - name: ELASTIC_APM_SERVER_URLS
+            valueFrom:
+              configMapKeyRef:
+                name: apm-agent-details
+                key: server_urls
+          - name: ELASTIC_APM_SERVICE_NAME
+            value: "elastic-springjpa-crud-mysql-service"
+          - name: ELASTIC_APM_APPLICATION_PACKAGES
+            value: "pas.spring.demos"
+          - name: ELASTIC_APM_SECRET_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: apm-token-secret
+                key: secret_token
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-springjpa-crud-mysql-service-lb
+  labels:
+    name: elastic-springjpa-crud-mysql-service-lb
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: elastic-springjpa-crud-mysql-service
+  type: LoadBalancer
+```
+
+**Deploy as Follows** 
+
+```bash
+$ kubectl apply -f h2-springjpa-crud-deployment.yml
+```
+
+- Once deployed check if LB service IP address is available as follows and the POD is running
+
+```bash
+$ k get pods
+NAME                                                    READY   STATUS    RESTARTS   AGE
+elastic-springjpa-crud-mysql-service-66dd4799d5-hk7nq   1/1     Running   0          31h
+pas-mysql-master-0                                      1/1     Running   0          9d
+pas-mysql-slave-0                                       1/1     Running   0          9d
+
+$ kubectl get svc
+NAME                      TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
+elastic-springjpa-crud-mysql-service-lb   LoadBalancer   10.131.245.234   35.244.71.190    80:30116/TCP      31h
+```
+
+-- Determine the LB IP to hit the home page using a command as follows
+
+```bash
+$ kubectl get service elastic-springjpa-crud-mysql-service-lb -o=jsonpath='{.status.loadBalancer.ingress[0].ip}{"\n"}'
+35.244.71.19
+```
+
+-- Navigate to the home page and generate some traffic as well as HTTP 500 and HTTP 404 errors 
+
+http://{IP-FROM-LAST-STEP}
+
+![alt tag](https://i.ibb.co/t4Yv0dp/elastic-springjpa-crud-mysql-service-1.png)
 
 <hr />
 Pas Apicella [pas.apicella at elastic.co] is an Solution Architect at Elastic APJ  
