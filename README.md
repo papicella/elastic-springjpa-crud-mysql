@@ -10,6 +10,7 @@ This demo is using a spring boot application which can be connected to H2 or MyS
 * Elastic Cloud deployment with APM - https://cloud.elastic.co
 * A K8s cluster 
 * kubectl CLI - https://kubernetes.io/docs/tasks/tools/install-kubectl/
+* mysql CLI (If using MySQL) - https://dev.mysql.com/downloads/shell/
 
 ## Table of Contents
 
