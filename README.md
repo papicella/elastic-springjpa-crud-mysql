@@ -14,7 +14,7 @@ This demo is using a spring boot application which can be connected to H2 or MyS
 ## Table of Contents
 
 * [Run With MySQL](#run-with-mysql)
-* [Run With H2](#run-wth-h2)
+* [Run With H2](#run-with-h2)
 
 ## Pre Steps for H2 or MySQL 
 - Clone project and change into directory as follows
@@ -54,6 +54,29 @@ helm install pas-mysql bitnami/mysql
 
 ```bash 
 kubectl expose service pas-mysql --type LoadBalancer --port 3306 --target-port 3306 --name pas-mysql-public
+```
+
+-- Verify you can connect to the MySQL remotely by running the script "connect-to-mysql-k8s.sh". If it works it will look like this
+
+```bash
+$ ./connect-to-mysql.sh
+
+mysql -h 1.1.0.3 -P3306 -u root -p******
+
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 163791
+Server version: 8.0.22 Source distribution
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
 ```
 
 - Create a database / user as shown below to the connected MySQL instance
