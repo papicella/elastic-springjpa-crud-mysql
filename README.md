@@ -1,8 +1,10 @@
 # Elastic Spring JPA CRUD Service - APM Demo
 
-This demo is using a spring boot application which can be connected to H2 or MySQL as required. Follow the steps below to get this deployed to K8s and setup to be traced by Elastic APM
+This demo is using a spring boot application which can be connected to H2 or MySQL as required. Follow the steps below to get this deployed to K8s and setup to be traced by Elastic APM. 
 
-**Note: This demo is using a simple micro service deployed to K8s and we use Elastic Cloud (ESS) for our APM Server and Elasticsearch cluster. In this example we use GKE as the K8s provider**
+This demo also includes Elastic Real User Monitoring (RUM) JS agent. Unlike Elastic APM backend agents which monitor requests and responses, the RUM JavaScript agent monitors the real user experience and interaction within your client-side application. The RUM JavaScript agent is also framework-agnostic, which means it can be used with any frontend JavaScript application.
+
+**Note: This demo is using a simple micro service deployed to K8s and we use Elastic Cloud (ESS) for our APM Server and the Elasticsearch cluster. In this example we use GKE as the K8s provider**
 
 ## Prerequisites
 
@@ -243,6 +245,8 @@ http://{IP-FROM-LAST-STEP}
 ![alt tag](https://i.ibb.co/crTnRQc/elastic-springjpa-crud-mysql-service-6.png)
 
 ![alt tag](https://i.ibb.co/JmkTWPc/elastic-springjpa-crud-mysql-service-7.png)
+
+![alt tag](https://i.ibb.co/gy3RCzf/elastic-springjpa-crud-mysql-service-8.png)
 
 ## Run with H2
 
