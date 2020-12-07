@@ -7,10 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import pas.spring.demos.entities.User;
 import pas.spring.demos.repositories.UserRepository;
+
+import co.elastic.apm.api.Transaction;
+import co.elastic.apm.api.ElasticApm;
 
 @Controller
 public class UserController {
@@ -20,6 +24,16 @@ public class UserController {
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @ModelAttribute("transaction")
+    public Transaction transaction() {
+        return ElasticApm.currentTransaction();
+    }
+
+    @ModelAttribute("apmServer")
+    public String apmServer() {
+        return System.getenv("ELASTIC_APM_SERVER_URLS");
     }
 
     @GetMapping("/signup")
@@ -57,7 +71,7 @@ public class UserController {
         userRepository.save(user);
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("userCount", userRepository.count());
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
@@ -66,7 +80,7 @@ public class UserController {
         userRepository.delete(user);
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("userCount", userRepository.count());
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/")

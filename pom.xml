@@ -16,12 +16,35 @@
 
     <properties>
         <java.version>11</java.version>
+        <elastic-apm.version>1.19.0</elastic-apm.version>
     </properties>
 
     <dependencies>
+        <!-- Elastic APM dependencies -->
         <dependency>
             <groupId>co.elastic.apm</groupId>
             <artifactId>apm-agent-attach</artifactId>
+            <version>${elastic-apm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-api</artifactId>
+            <version>${elastic-apm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>elastic-apm-agent</artifactId>
+            <version>${elastic-apm.version}</version>
+        </dependency>
+        <!-- End of Elastic APM dependencies -->
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-api</artifactId>
+            <version>1.19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>elastic-apm-agent</artifactId>
             <version>1.19.0</version>
         </dependency>
         <dependency>
