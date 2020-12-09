@@ -21,3 +21,4 @@ management:
     web:
       exposure:
         include: '*'
+    enabled-by-default: true

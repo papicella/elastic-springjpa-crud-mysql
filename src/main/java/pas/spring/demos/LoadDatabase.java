@@ -18,6 +18,15 @@ public class LoadDatabase {
             log.info("Pre loading " + userRepository.save(new User("Lucia", "lucia78@rocks.com")));
             log.info("Pre loading " + userRepository.save(new User("Lucas", "lucas@rocks.com")));
             log.info("Pre loading " + userRepository.save(new User("Siena", "siena@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("John", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Abby", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Emily", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Mark", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Rob", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Cassey", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Amanda", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Shaun", "myemail@rocks.com")));
+            log.info("Pre loading " + userRepository.save(new User("Ray", "myemail@rocks.com")));
         };
     }
 }

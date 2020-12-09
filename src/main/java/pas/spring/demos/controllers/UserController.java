@@ -3,18 +3,19 @@ package pas.spring.demos.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pas.spring.demos.entities.User;
 import pas.spring.demos.repositories.UserRepository;
 
 import co.elastic.apm.api.Transaction;
 import co.elastic.apm.api.ElasticApm;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -87,6 +88,16 @@ public class UserController {
     public String indexPage (Model model){
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("userCount", userRepository.count());
+        return "index";
+    }
+
+    @PostMapping("/search")
+    public String findByName (@RequestParam(value="name") String name, Model model){
+
+        List<User> bookSearchList = userRepository.findByNameContaining(name);
+
+        model.addAttribute("users", bookSearchList);
+        model.addAttribute("userCount", bookSearchList.size());
         return "index";
     }
 
