@@ -2,6 +2,7 @@ package pas.spring.demos.controllers;
 
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import co.elastic.apm.api.ElasticApm;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class UserController {
 
@@ -45,6 +47,7 @@ public class UserController {
     @PostMapping("/adduser")
     public String addUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            log.info("Add new user invoked");
             return "add-user";
         }
 
@@ -56,6 +59,7 @@ public class UserController {
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
+        log.info("Edit user invoked");
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         model.addAttribute("user", user);
         model.addAttribute("userCount", userRepository.count());
@@ -64,6 +68,7 @@ public class UserController {
 
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") long id, @Valid User user, BindingResult result, Model model) {
+        log.info("Update user invoked");
         if (result.hasErrors()) {
             user.setId(id);
             return "update-user";
@@ -77,6 +82,7 @@ public class UserController {
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
+        log.info("Delete user invoked");
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         userRepository.delete(user);
         model.addAttribute("users", userRepository.findAll());
@@ -86,6 +92,7 @@ public class UserController {
 
     @GetMapping("/")
     public String indexPage (Model model){
+        log.info("Home page invoked");
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("userCount", userRepository.count());
         return "index";
@@ -94,6 +101,7 @@ public class UserController {
     @PostMapping("/search")
     public String findByName (@RequestParam(value="name") String name, Model model){
 
+        log.info("Search invoked");
         List<User> bookSearchList = userRepository.findByNameContaining(name);
 
         model.addAttribute("users", bookSearchList);
@@ -103,6 +111,7 @@ public class UserController {
 
     @GetMapping("/500error")
     public String userError (Model model) {
+        log.info("Invoking a HTTP 500 error now");
         throw new RuntimeException("error looking up database");
     }
 }

@@ -9,9 +9,9 @@
 <div th:switch="${users}" class="container my-5">
     <div class="row">
         <div class="col-md-6">
+            <h2 class="my-5">Users</h2>
             <h2 th:case="null">No users yet!</h2>
             <div th:case="*">
-                <h2 class="my-5">Users</h2>
                 <!-- Success Dismissible Alert -->
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -43,6 +43,24 @@
                 <a href="/404issue" class="btn btn-primary">Invalid 404</a>
                 <a href="/500error" class="btn btn-primary">HTTP 500</a>
             </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="my-5">Information</h2>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Spring boot Actuator Endpoints!!!!!
+            </div>
+            <ul>
+                <li><a href="/actuator" target="_new">Actuator Endpoints</a> </li>
+                <li><a href="/actuator/health" target="_new">Application Health</a> </li>
+                <li><a href="/actuator/env" target="_new">Env Details</a> </li>
+                <li><a href="/actuator/metrics" target="_new">All Metrics</a> </li>
+                <li><a href="/actuator/configprops" target="_new">Config properties</a> </li>
+                <li><a href="/actuator/mappings" target="_new">Mappings</a> </li>
+                <li><a href="/actuator/beans" target="_new">Beans</a> </li>
+            </ul>
         </div>
     </div>
 </div>
