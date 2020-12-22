@@ -14,11 +14,22 @@
                 <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a id="actuator-env" class="nav-link" href="/actuator/env">ENV details</a>
+                <a id="actuator-mem-used" class="nav-link" href="actuator/metrics/jvm.memory.used" target="_new">Used Memory</a>
             </li>
-            <li class="nav-item">
-                <a id="actuator-mem-used" class="nav-link" href="actuator/metrics/jvm.memory.used">Used Memory</a>
+            <!--
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">Darkly <span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="download">
+                    <a class="dropdown-item" rel="noopener" target="_blank" href="https://jsfiddle.net/bootswatch/1172d9hh/">Open in JSFiddle</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="../4/darkly/bootstrap.min.css" download>bootstrap.min.css</a>
+                    <a class="dropdown-item" href="../4/darkly/bootstrap.css" download>bootstrap.css</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="../4/darkly/_variables.scss" download>_variables.scss</a>
+                    <a class="dropdown-item" href="../4/darkly/_bootswatch.scss" download>_bootswatch.scss</a>
+                </div>
             </li>
+            -->
         </ul>
         <form class="form-inline my-2 my-lg-0" th:action="@{/search}" method="post">
             <input class="form-control mr-sm-2" id="name" name="name" type="search" placeholder="Search by name" aria-label="Search">
